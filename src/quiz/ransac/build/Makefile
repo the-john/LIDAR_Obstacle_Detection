@@ -150,32 +150,32 @@ home/workspace/SFND_Lidar_Obstacle_Detection/src/render/render.cpp.s:
 	$(MAKE) -f CMakeFiles/quizRansac.dir/build.make CMakeFiles/quizRansac.dir/home/workspace/SFND_Lidar_Obstacle_Detection/src/render/render.cpp.s
 .PHONY : home/workspace/SFND_Lidar_Obstacle_Detection/src/render/render.cpp.s
 
-ransac2d.o: ransac2d.cpp.o
+ransac3d.o: ransac3d.cpp.o
 
-.PHONY : ransac2d.o
+.PHONY : ransac3d.o
 
 # target to build an object file
-ransac2d.cpp.o:
-	$(MAKE) -f CMakeFiles/quizRansac.dir/build.make CMakeFiles/quizRansac.dir/ransac2d.cpp.o
-.PHONY : ransac2d.cpp.o
+ransac3d.cpp.o:
+	$(MAKE) -f CMakeFiles/quizRansac.dir/build.make CMakeFiles/quizRansac.dir/ransac3d.cpp.o
+.PHONY : ransac3d.cpp.o
 
-ransac2d.i: ransac2d.cpp.i
+ransac3d.i: ransac3d.cpp.i
 
-.PHONY : ransac2d.i
+.PHONY : ransac3d.i
 
 # target to preprocess a source file
-ransac2d.cpp.i:
-	$(MAKE) -f CMakeFiles/quizRansac.dir/build.make CMakeFiles/quizRansac.dir/ransac2d.cpp.i
-.PHONY : ransac2d.cpp.i
+ransac3d.cpp.i:
+	$(MAKE) -f CMakeFiles/quizRansac.dir/build.make CMakeFiles/quizRansac.dir/ransac3d.cpp.i
+.PHONY : ransac3d.cpp.i
 
-ransac2d.s: ransac2d.cpp.s
+ransac3d.s: ransac3d.cpp.s
 
-.PHONY : ransac2d.s
+.PHONY : ransac3d.s
 
 # target to generate assembly for a file
-ransac2d.cpp.s:
-	$(MAKE) -f CMakeFiles/quizRansac.dir/build.make CMakeFiles/quizRansac.dir/ransac2d.cpp.s
-.PHONY : ransac2d.cpp.s
+ransac3d.cpp.s:
+	$(MAKE) -f CMakeFiles/quizRansac.dir/build.make CMakeFiles/quizRansac.dir/ransac3d.cpp.s
+.PHONY : ransac3d.cpp.s
 
 # Help Target
 help:
@@ -189,9 +189,9 @@ help:
 	@echo "... home/workspace/SFND_Lidar_Obstacle_Detection/src/render/render.o"
 	@echo "... home/workspace/SFND_Lidar_Obstacle_Detection/src/render/render.i"
 	@echo "... home/workspace/SFND_Lidar_Obstacle_Detection/src/render/render.s"
-	@echo "... ransac2d.o"
-	@echo "... ransac2d.i"
-	@echo "... ransac2d.s"
+	@echo "... ransac3d.o"
+	@echo "... ransac3d.i"
+	@echo "... ransac3d.s"
 .PHONY : help
 
 

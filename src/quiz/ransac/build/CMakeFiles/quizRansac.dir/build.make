@@ -57,18 +57,18 @@ include CMakeFiles/quizRansac.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/quizRansac.dir/flags.make
 
-CMakeFiles/quizRansac.dir/ransac2d.cpp.o: CMakeFiles/quizRansac.dir/flags.make
-CMakeFiles/quizRansac.dir/ransac2d.cpp.o: ../ransac2d.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/quizRansac.dir/ransac2d.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/quizRansac.dir/ransac2d.cpp.o -c /home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/ransac2d.cpp
+CMakeFiles/quizRansac.dir/ransac3d.cpp.o: CMakeFiles/quizRansac.dir/flags.make
+CMakeFiles/quizRansac.dir/ransac3d.cpp.o: ../ransac3d.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/quizRansac.dir/ransac3d.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/quizRansac.dir/ransac3d.cpp.o -c /home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/ransac3d.cpp
 
-CMakeFiles/quizRansac.dir/ransac2d.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/quizRansac.dir/ransac2d.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/ransac2d.cpp > CMakeFiles/quizRansac.dir/ransac2d.cpp.i
+CMakeFiles/quizRansac.dir/ransac3d.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/quizRansac.dir/ransac3d.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/ransac3d.cpp > CMakeFiles/quizRansac.dir/ransac3d.cpp.i
 
-CMakeFiles/quizRansac.dir/ransac2d.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/quizRansac.dir/ransac2d.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/ransac2d.cpp -o CMakeFiles/quizRansac.dir/ransac2d.cpp.s
+CMakeFiles/quizRansac.dir/ransac3d.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/quizRansac.dir/ransac3d.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/ransac3d.cpp -o CMakeFiles/quizRansac.dir/ransac3d.cpp.s
 
 CMakeFiles/quizRansac.dir/home/workspace/SFND_Lidar_Obstacle_Detection/src/render/render.cpp.o: CMakeFiles/quizRansac.dir/flags.make
 CMakeFiles/quizRansac.dir/home/workspace/SFND_Lidar_Obstacle_Detection/src/render/render.cpp.o: /home/workspace/SFND_Lidar_Obstacle_Detection/src/render/render.cpp
@@ -85,13 +85,13 @@ CMakeFiles/quizRansac.dir/home/workspace/SFND_Lidar_Obstacle_Detection/src/rende
 
 # Object files for target quizRansac
 quizRansac_OBJECTS = \
-"CMakeFiles/quizRansac.dir/ransac2d.cpp.o" \
+"CMakeFiles/quizRansac.dir/ransac3d.cpp.o" \
 "CMakeFiles/quizRansac.dir/home/workspace/SFND_Lidar_Obstacle_Detection/src/render/render.cpp.o"
 
 # External object files for target quizRansac
 quizRansac_EXTERNAL_OBJECTS =
 
-quizRansac: CMakeFiles/quizRansac.dir/ransac2d.cpp.o
+quizRansac: CMakeFiles/quizRansac.dir/ransac3d.cpp.o
 quizRansac: CMakeFiles/quizRansac.dir/home/workspace/SFND_Lidar_Obstacle_Detection/src/render/render.cpp.o
 quizRansac: CMakeFiles/quizRansac.dir/build.make
 quizRansac: /usr/lib/x86_64-linux-gnu/libboost_system.so

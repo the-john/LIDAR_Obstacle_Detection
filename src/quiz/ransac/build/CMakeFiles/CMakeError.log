@@ -1,22 +1,22 @@
 Determining if the pthread_create exist failed with the following output:
 Change Dir: /home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_12210/fast"
-/usr/bin/make -f CMakeFiles/cmTC_12210.dir/build.make CMakeFiles/cmTC_12210.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_5c65c/fast"
+/usr/bin/make -f CMakeFiles/cmTC_5c65c.dir/build.make CMakeFiles/cmTC_5c65c.dir/build
 make[1]: Entering directory '/home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_12210.dir/CheckSymbolExists.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_12210.dir/CheckSymbolExists.c.o   -c /home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
-Linking C executable cmTC_12210
-/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_12210.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_12210.dir/CheckSymbolExists.c.o  -o cmTC_12210 
-CMakeFiles/cmTC_12210.dir/CheckSymbolExists.c.o: In function `main':
+Building C object CMakeFiles/cmTC_5c65c.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_5c65c.dir/CheckSymbolExists.c.o   -c /home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_5c65c
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5c65c.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_5c65c.dir/CheckSymbolExists.c.o  -o cmTC_5c65c 
+CMakeFiles/cmTC_5c65c.dir/CheckSymbolExists.c.o: In function `main':
 CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_12210.dir/build.make:86: recipe for target 'cmTC_12210' failed
-make[1]: *** [cmTC_12210] Error 1
+CMakeFiles/cmTC_5c65c.dir/build.make:86: recipe for target 'cmTC_5c65c' failed
+make[1]: *** [cmTC_5c65c] Error 1
 make[1]: Leaving directory '/home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/build/CMakeFiles/CMakeTmp'
-Makefile:121: recipe for target 'cmTC_12210/fast' failed
-make: *** [cmTC_12210/fast] Error 2
+Makefile:121: recipe for target 'cmTC_5c65c/fast' failed
+make: *** [cmTC_5c65c/fast] Error 2
 
 File /home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
 /* */
@@ -36,20 +36,20 @@ int main(int argc, char** argv)
 Determining if the function pthread_create exists in the pthreads failed with the following output:
 Change Dir: /home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_0be54/fast"
-/usr/bin/make -f CMakeFiles/cmTC_0be54.dir/build.make CMakeFiles/cmTC_0be54.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_475f4/fast"
+/usr/bin/make -f CMakeFiles/cmTC_475f4.dir/build.make CMakeFiles/cmTC_475f4.dir/build
 make[1]: Entering directory '/home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_0be54.dir/CheckFunctionExists.c.o
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_0be54.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.13/Modules/CheckFunctionExists.c
-Linking C executable cmTC_0be54
-/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0be54.dir/link.txt --verbose=1
-/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_0be54.dir/CheckFunctionExists.c.o  -o cmTC_0be54 -lpthreads 
+Building C object CMakeFiles/cmTC_475f4.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_475f4.dir/CheckFunctionExists.c.o   -c /usr/local/share/cmake-3.13/Modules/CheckFunctionExists.c
+Linking C executable cmTC_475f4
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_475f4.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_475f4.dir/CheckFunctionExists.c.o  -o cmTC_475f4 -lpthreads 
 /usr/bin/ld: cannot find -lpthreads
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_0be54.dir/build.make:86: recipe for target 'cmTC_0be54' failed
-make[1]: *** [cmTC_0be54] Error 1
+CMakeFiles/cmTC_475f4.dir/build.make:86: recipe for target 'cmTC_475f4' failed
+make[1]: *** [cmTC_475f4] Error 1
 make[1]: Leaving directory '/home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/build/CMakeFiles/CMakeTmp'
-Makefile:121: recipe for target 'cmTC_0be54/fast' failed
-make: *** [cmTC_0be54/fast] Error 2
+Makefile:121: recipe for target 'cmTC_475f4/fast' failed
+make: *** [cmTC_475f4/fast] Error 2
 
 

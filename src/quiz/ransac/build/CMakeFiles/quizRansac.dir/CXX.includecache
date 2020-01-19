@@ -42,7 +42,7 @@ chrono
 render/box.h
 /home/workspace/SFND_Lidar_Obstacle_Detection/src/render/box.h
 
-/home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/ransac2d.cpp
+/home/workspace/SFND_Lidar_Obstacle_Detection/src/quiz/ransac/ransac3d.cpp
 ../../render/render.h
 /home/workspace/SFND_Lidar_Obstacle_Detection/src/render/render.h
 unordered_set
@@ -51,6 +51,10 @@ unordered_set
 /home/workspace/SFND_Lidar_Obstacle_Detection/src/processPointClouds.h
 ../../processPointClouds.cpp
 /home/workspace/SFND_Lidar_Obstacle_Detection/src/processPointClouds.cpp
+cmath
+-
+vector
+-
 
 /home/workspace/SFND_Lidar_Obstacle_Detection/src/render/box.h
 Eigen/Geometry
