@@ -53,11 +53,37 @@ struct KdTree
 		insertHelper(&root, 0, point, id);  // call insertHelper. resign the node in the tree if it is NULL, so pass in the memory address for root (&root).  Depth is zero (we are at the root).  point and id are needed to create our brand new node.
 	}
 
+	void searchHelper(std::vector<float> target, Node* node, int depth, float distanceTol, std::vector<int>& ids)
+	{
+		if (node != NULL)  // if our node is not NULL
+		{
+			// See if the node is in the target box (box is centered at target[])
+			if ( (node -> point[0] >= (target[0] - distanceTol) && node -> point[0] <= (target[0] + distanceTol)) && (node -> point[1] >= (target[1] - distanceTol) && node -> point[1] <= (target[1] + distanceTol)))
+			{
+				// if it is in the box, figure out the distance
+				float distance = sqrt((node -> point[0] - target[0]) * (node -> point[0] - target[0]) + (node -> point[1] - target[1]) * (node -> point[1] - target[1]));
+				if (distance <= distanceTol)  // then push back the node id onto ids
+					ids.push_back(node -> id);
+			}
+			
+			// Check across boundary and determine where we want to flow in the tree ... left or right
+			if ((target[depth % 2] - distanceTol) < node -> point[depth % 2])
+				searchHelper(target, node -> left, depth + 1, distanceTol, ids);
+			if ((target[depth % 2] + distanceTol) > node -> point[depth % 2])
+				searchHelper(target, node -> right, depth + 1, distanceTol, ids);
+		}
+	}
+
+
+
+
 	// return a list of point ids in the tree that are within distance of target
-	std::vector<int> search(std::vector<float> target, float distanceTol)
+	std::vector<int> search(std::vector<float> target, float distanceTol)  // pass in target value (x and y for 2D) and distance tollerance
 	{
 		std::vector<int> ids;
-		return ids;
+		searchHelper(target, root, 0, distanceTol, ids);  // pass it the target point, the start of the tree, root depth is currently zero, distance tollerance, and ids by reference
+
+		return ids;  // we are interestind in the indices that are near by
 	}
 	
 
