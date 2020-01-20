@@ -119,6 +119,35 @@ std::vector<typename pcl::PointCloud<PointT>::Ptr> ProcessPointClouds<PointT>::C
 
     // TODO:: Fill in the function to perform euclidean clustering to group detected obstacles
 
+    // Create the KdTree object for the search method of the extraction
+    typename pcl::search::KdTree<PointT>::Ptr tree (new pcl::search::KdTree<PointT>); // use template <PointT> 
+    tree -> setInputCloud(cloud);  // feed the cloud (or agrument) into the clustering function, the KD-Tree called tree
+
+    std::vector<pcl::PointIndices> clusterIndices;  // create the cluster indicies
+    pcl::EuclideanClusterExtraction<PointT> ec;  // create an object called ec
+    ec.setClusterTolerance(clusterTolerance);  // cluster tolerence is passed in from this functions header
+    ec.setMinClusterSize(minSize);  // min size is passed in from this functions header
+    ec.setMaxClusterSize(maxSize);  // max size is passed in from this functions header
+    ec.setSearchMethod(tree);  // here I tell the ec object to use the tree from above
+    ec.setInputCloud(cloud);  // here I set the ec object with the cloud
+    ec.extract(clusterIndices);  // here I generate my cluster indicies
+
+    // Now I'm set to go through the cluster indicies and create some point clouds
+    // Each point cloud is goint to be a different cluster
+    for (pcl::PointIndices getIndices: clusterIndices)  // itterate through clusterIndices, and the type for those is pcl::PointIndices ... a vector of pcl::PontIndices
+    {
+        typename pcl::PointCloud<PointT>::Ptr cloudCluster (new pcl::PointCloud<PointT>);  // create a new obstacle cloud, cloud cluster
+
+        for (int index : getIndices.indices) // now I itterate through the indices (the indexes)
+            cloudCluster -> points.push_back (cloud -> points[index]);  // Take each indice and push it back into the obstacle cluster that I just created .. the cloudCluster
+        
+        cloudCluster -> width = cloudCluster -> points.size();  // set up the width and height
+        cloudCluster -> height = 1;
+        cloudCluster -> is_dense = true;
+
+        clusters.push_back(cloudCluster);  // now push it back into my clusters, which is my vector of point clouds
+    }
+
     auto endTime = std::chrono::steady_clock::now();
     auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
     std::cout << "clustering took " << elapsedTime.count() << " milliseconds and found " << clusters.size() << " clusters" << std::endl;

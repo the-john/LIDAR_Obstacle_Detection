@@ -163,7 +163,6 @@ std::unordered_set<int> RansacPlane(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, i
 		y3 = cloud -> points[*itr].y;
 		z3 = cloud -> points[*itr].z;
 
-        
 		// Use point1 as a reference and define two vectors on the plane v1 and v2
 		// 	 Vector v1 travels from point1 to point2
         int xv1 = x2 - x1;
