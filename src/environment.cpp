@@ -53,9 +53,13 @@ void simpleHighway(pcl::visualization::PCLVisualizer::Ptr& viewer)
 
     // TODO:: Create point processor
     ProcessPointClouds<pcl::PointXYZ> pointProcessor;
+    
     std::pair<pcl::PointCloud<pcl::PointXYZ>::Ptr, pcl::PointCloud<pcl::PointXYZ>::Ptr> segmentCloud = pointProcessor.SegmentPlane(inputCloud, 100, 0.2); // call the point processor, 100 itterations, distance of 0.2m.  This line creates our pair, obstCloud and planeCloud
-    //renderPointCloud(viewer, segmentCloud.first, "obstCloud", Color(1, 0, 0));  // show the obstacle cloud by pulling the first element of segmentCloud
-    //renderPointCloud(viewer, segmentCloud.second, "planeCloud", Color(0, 1, 0)); // show the plane cloud by pulling the second element of segmentCloud (color is R, G, B)
+    
+    //if (render_obst)
+        //renderPointCloud(viewer, segmentCloud.first, "obstCloud", Color(1, 0, 0));  // show the obstacle cloud by pulling the first element of segmentCloud
+    //if (render_plane)
+        //renderPointCloud(viewer, segmentCloud.second, "planeCloud", Color(0, 1, 0)); // show the plane cloud by pulling the second element of segmentCloud (color is R, G, B)
 
     // Call our pointProcessor Clustering function
     std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> cloudClusters = pointProcessor.Clustering(segmentCloud.first, 2.0, 3, 30); // first part is obstacles, second part is road points  ... here we grap the first part, obstacles.  Hyper-parameters: 1.0 for distance tollerance, 3 for min # of points to be considered a cluster, 30 for max # of points to be considered a cluster
@@ -65,17 +69,23 @@ void simpleHighway(pcl::visualization::PCLVisualizer::Ptr& viewer)
     std::vector<Color> colors = {Color(1, 0, 0), Color(1, 1, 0), Color(0, 0, 1)};  // set up colors for clusters of point clouds by creating a color list, to be used later.  Red, Yellow, and Blue
     for (pcl::PointCloud<pcl::PointXYZ>::Ptr cluster : cloudClusters)  // grab the point cloud and call it cluster ... from the cloudClusters
     {
-        std::cout << "cluster size ";
-        pointProcessor.numPoints(cluster);
-        renderPointCloud(viewer, cluster, "obstClout" + std::to_string(clusterId), colors[clusterId%colors.size()]);  // render pointcloud, feed it cluster and give it the name obstCloud, then give it a color
+        //if (render_clusters)
+        //{
+            std::cout << "cluster size ";
+            pointProcessor.numPoints(cluster);
+            renderPointCloud(viewer, cluster, "obstClout" + std::to_string(clusterId), colors[clusterId%colors.size()]);  // render pointcloud, feed it cluster and give it the name obstCloud, then give it a color
+        //}
 
-        // Put a box around the rendered point cloud
-        //Box box = pointProcessor.BoundingBox(cluster);
-        //renderBox(viewer, box, clusterId);
+        //if (render_box)
+        //{
+            // Put a box around the rendered point cloud
+            Box box = pointProcessor.BoundingBox(cluster);
+            renderBox(viewer, box, clusterId);
+        //}
 
         ++clusterId;  // so I can itterate through the vector of point clouds
     }
-
+    //renderPointCloud(viewer, segmentCloud.second, "planeCloud");
 }
 
 

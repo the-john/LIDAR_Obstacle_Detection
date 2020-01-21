@@ -69,21 +69,48 @@ void render2DTree(Node* node, pcl::visualization::PCLVisualizer::Ptr& viewer, Bo
 
 		render2DTree(node->left,viewer, lowerWindow, iteration, depth+1);
 		render2DTree(node->right,viewer, upperWindow, iteration, depth+1);
-
-
 	}
+}
 
+// This function runs recursively, it calls itself
+void clusterHelper(int indice, const std::vector<std::vector<float>> points, std::vector<int>& cluster, std::vector<bool>& processed, KdTree* tree, float distanceTol)
+{
+	processed[indice] = true;  // first, mark the point as being processed
+	cluster.push_back(indice);  // go ahead and push that point back into cluster (we're slowly building up our cluster)
+
+	std::vector<int> nearest = tree -> search(points[indice], distanceTol);  // see which points are near the indice passed in at the start of the function
+
+	for (int id : nearest)  // now we itterate through the nearby indices
+	{
+		if (!processed[id])  // if the point has not been processed yet, include it into clusterHelper
+			clusterHelper(id, points, cluster, processed, tree, distanceTol);
+	}
 }
 
 std::vector<std::vector<int>> euclideanCluster(const std::vector<std::vector<float>>& points, KdTree* tree, float distanceTol)
 {
-
 	// TODO: Fill out this function to return list of indices for each cluster
 
-	std::vector<std::vector<int>> clusters;
+	std::vector<std::vector<int>> clusters;  // this is my vector of vector ints
+	// Need to keep track of which points have been processed or not
+	std::vector<bool> processed(points.size(), false);  // points is all the data that I have for my 2D set (eleven in total)
+
+	int i = 0;
+	while (i < points.size())  // now, itterate through those points (the eleven 2D points)
+	{
+		if (processed[i])  // if the point has been processed already
+		{
+			i++;  // then just go ahead and increment the index and move on to the next point
+			continue;
+		}
+		// if the point has NOT been processed ...
+		std::vector<int> cluster;  // I create a brand new cluster
+		clusterHelper(i, points, cluster, processed, tree, distanceTol);  // in psuedo code, clusterHelper was called proximety
+		clusters.push_back(cluster);
+		i++;
+	}
  
 	return clusters;
-
 }
 
 int main ()
