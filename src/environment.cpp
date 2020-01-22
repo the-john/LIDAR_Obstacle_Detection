@@ -37,10 +37,24 @@ std::vector<Car> initHighway(bool renderScene, pcl::visualization::PCLVisualizer
 
 void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer)  // the argument used is our viewer
 {
+    /*
     ProcessPointClouds<pcl::PointXYZI> pointProcessor;  // create pointProcesor that uses XYZI
     pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud = pointProcessor.loadPcd("../src/sensors/data/pcd/data_1/0000000000.pcd");  // load up the point cloud data
-
+    
     renderPointCloud(viewer, inputCloud, "inputCloud");
+    */
+        
+    Eigen::Vector4f min (-10, -6.25, -3, 1.0);  // minimum size for the box (or region of interst); x is red, y is green, z is blue axis in image
+    Eigen::Vector4f max (20, 8.25, 10, 1.0);  // maximum size for the box (or region of interest); x is red, y is green, z is blue axis in image
+   
+    ProcessPointClouds<pcl::PointXYZI> pointProcessor;  // create pointProcesor that uses XYZI
+    pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud = pointProcessor.loadPcd("../src/sensors/data/pcd/data_1/0000000000.pcd");  // load up the point cloud data
+    pcl::PointCloud<pcl::PointXYZI>::Ptr filterCloud = pointProcessor.FilterCloud(inputCloud, 0.3, min, max);
+
+    std::cout << "original size: " << inputCloud -> width * inputCloud -> height << endl;
+    std::cout << "filtered size: " << filterCloud -> width * filterCloud -> height << endl;
+
+    renderPointCloud(viewer, filterCloud, "filterCloud");
 }
 
 
@@ -131,6 +145,7 @@ int main (int argc, char** argv)
     initCamera(setAngle, viewer);
     //simpleHighway(viewer);
     cityBlock(viewer);
+    
 
     while (!viewer->wasStopped ())
     {

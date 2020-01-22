@@ -21,7 +21,7 @@ void ProcessPointClouds<PointT>::numPoints(typename pcl::PointCloud<PointT>::Ptr
 
 
 template<typename PointT>
-typename pcl::PointCloud<PointT>::Ptr ProcessPointClouds<PointT>::FilterCloud(typename pcl::PointCloud<PointT>::Ptr cloud, float filterRes, Eigen::Vector4f minPoint, Eigen::Vector4f maxPoint)
+typename pcl::PointCloud<PointT>::Ptr ProcessPointClouds<PointT>::FilterCloud(typename pcl::PointCloud<PointT>::Ptr cloud, float filterRes, Eigen::Vector4f minPoint, Eigen::Vector4f maxPoint) // minPoint x, y, z and maxPoint x, y, z
 {
 
     // Time segmentation process
@@ -29,11 +29,48 @@ typename pcl::PointCloud<PointT>::Ptr ProcessPointClouds<PointT>::FilterCloud(ty
 
     // TODO:: Fill in the function to do voxel grid point reduction and region based filtering
 
+    // Create the filtered object then downsample the dataset using a leaf size of 0.2m
+    // so there is only a single point in each voxel
+    pcl::VoxelGrid<PointT> vg;  // create a voxel grid
+    typename pcl::PointCloud<PointT>::Ptr cloudFiltered (new pcl::PointCloud<PointT>);  // create a new point cloud to put our filtered results into
+    //std::cout << typeid(vg).name() << endl;
+    vg.setInputCloud(cloud);  // give the voxel grid the cloud
+    vg.setLeafSize(filterRes, filterRes, filterRes);  // define the cell size for the voxel grid
+    vg.filter(*cloudFiltered);  // after filtering, put the results in cloudFiltered
+
+    typename pcl::PointCloud<PointT>::Ptr cloudRegion (new pcl::PointCloud<PointT>);  // create a new point cloud called cloudRegion
+
+    pcl::CropBox<PointT> region(true);  // set region to true because you're dealing with points inside the cropbox
+    region.setMin(minPoint);  // set min from the arguments passed into this function
+    region.setMax(maxPoint);  // set max from the arguments passed into this function
+    region.setInputCloud(cloudFiltered);  // here we set the input cloud to cloudFiltered
+    region.filter(*cloudRegion);  // here we put the results of CropBox into cloudRegion
+
+    // Now let's try to remove the roof points.  Those points are static and don't really tell us anything
+    std::vector<int> indices;
+
+    pcl::CropBox<PointT> roof(true);  // set region to true because you're dealing with points inside the cropbox
+    roof.setMin(Eigen::Vector4f (-1.5, -1.7, -1, 1));  // found via playing around with the code and visuals
+    roof.setMax(Eigen::Vector4f (2.6, 1.7, -0.4, 1));  // found via playing around with the code and visuals
+    roof.setInputCloud(cloudRegion);  // give it the cloudRegion to act on
+    roof.filter(indices);  // save the results into indices, which are the points inside of cloudRegion that fit inside the defined box (the roof of the vehicle)
+
+    pcl::PointIndices::Ptr inliers {new pcl::PointIndices};  // create a PointIndicies object
+    for (int point : indices)  // itterate through the indices vector (all the points we want to remove from cloudRegion)
+        inliers -> indices.push_back(point);  // take those inliers and push them into inliers
+    
+    // Now, pull the rooftop inliers out of the cloudRegion data set
+    pcl::ExtractIndices<PointT> extract;  // create an extract 
+    extract.setInputCloud(cloudRegion);  // set the input cloud to cloudRegion
+    extract.setIndices(inliers);  // give it inliers, the indices of points
+    extract.setNegative(true);  // setting Negative to "true" means that we will be removing the inliers points
+    extract.filter(*cloudRegion);  // push the final results into cloudRegion
+
     auto endTime = std::chrono::steady_clock::now();
     auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
     std::cout << "filtering took " << elapsedTime.count() << " milliseconds" << std::endl;
 
-    return cloud;
+    return cloudRegion;
 
 }
 
