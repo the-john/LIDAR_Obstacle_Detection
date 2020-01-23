@@ -1,5 +1,5 @@
 /* \author John Oliver via Aaron Brown */
-// Quiz on implementing simple RANSAC line fitting
+// Implementing simple RANSAC line fitting
 
 #include "../../render/render.h"
 #include <unordered_set>

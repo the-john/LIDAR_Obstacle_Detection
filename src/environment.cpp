@@ -1,4 +1,3 @@
-/* \author Aaron Brown */
 // Create simple 3d highway enviroment using PCL
 // for exploring self-driving car sensors
 
@@ -34,8 +33,8 @@ std::vector<Car> initHighway(bool renderScene, pcl::visualization::PCLVisualizer
     return cars;
 }
 
-
-void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer)  // the argument used is our viewer
+void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer, ProcessPointClouds<pcl::PointXYZI> pointProcessor, pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud)  // with additional arguments for the pointProcessor that I'm passing in so that I don't have to create it everytime inside the function
+//void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer)  // the argument used is our viewer
 {
     /*
     ProcessPointClouds<pcl::PointXYZI> pointProcessor;  // create pointProcesor that uses XYZI
@@ -44,17 +43,61 @@ void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer)  // the argument 
     renderPointCloud(viewer, inputCloud, "inputCloud");
     */
         
-    Eigen::Vector4f min (-10, -6.25, -3, 1.0);  // minimum size for the box (or region of interst); x is red, y is green, z is blue axis in image
-    Eigen::Vector4f max (20, 8.25, 10, 1.0);  // maximum size for the box (or region of interest); x is red, y is green, z is blue axis in image
+    Eigen::Vector4f min (-15, -6.25, -3, 1.0);  // minimum size for the box (or region of interst); x is red, y is green, z is blue axis in image
+    Eigen::Vector4f max (20, 7.65, 10, 1.0);  // maximum size for the box (or region of interest); x is red, y is green, z is blue axis in image
    
-    ProcessPointClouds<pcl::PointXYZI> pointProcessor;  // create pointProcesor that uses XYZI
-    pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud = pointProcessor.loadPcd("../src/sensors/data/pcd/data_1/0000000000.pcd");  // load up the point cloud data
-    pcl::PointCloud<pcl::PointXYZI>::Ptr filterCloud = pointProcessor.FilterCloud(inputCloud, 0.3, min, max);
+    //ProcessPointClouds<pcl::PointXYZI> pointProcessor;  // create pointProcesor that uses XYZI; not needed now because I'm passing it in
+    //pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud = pointProcessor.loadPcd("../src/sensors/data/pcd/data_1/0000000000.pcd");  // load up the point cloud data; no longer need to load this cloud
+    //pcl::PointCloud<pcl::PointXYZI>::Ptr filterCloud = pointProcessor.FilterCloud(inputCloud, 0.3, min, max);
+    inputCloud = pointProcessor.FilterCloud(inputCloud, 0.3, min, max);
+    
+    //std::cout << "original size: " << inputCloud -> width * inputCloud -> height << endl;
+    //std::cout << "filtered size: " << filterCloud -> width * filterCloud -> height << endl;
 
-    std::cout << "original size: " << inputCloud -> width * inputCloud -> height << endl;
-    std::cout << "filtered size: " << filterCloud -> width * filterCloud -> height << endl;
+    // Segment out the ground plane from the obstacles
+    //std::pair<pcl::PointCloud<pcl::PointXYZI>::Ptr, pcl::PointCloud<pcl::PointXYZI>::Ptr> segmentCloud = pointProcessor.SegmentPlane(filterCloud, 100, 0.13); // call the point processor, 100 itterations, distance of 0.13m.  This line creates our pair, obstCloud and planeCloud
+    std::pair<pcl::PointCloud<pcl::PointXYZI>::Ptr, pcl::PointCloud<pcl::PointXYZI>::Ptr> segmentCloud = pointProcessor.SegmentPlane(inputCloud, 25, 0.3);
+    //renderPointCloud(viewer, segmentCloud.second, "planeCloud");
 
-    renderPointCloud(viewer, filterCloud, "filterCloud");
+    // Render the road as green, and all of the obstacles as red
+	renderPointCloud(viewer, segmentCloud.second, "inliers", Color(0,1,0));
+  	//renderPointCloud(viewer, segmentCloud.first, "outliers", Color(1,0,0));
+	
+    ///*
+    // Place a purple box to represent the 3D space that our car takes up (see render.cpp for details)
+    Box meBox;  // set the dimensions of the box
+    meBox.x_min = -2.0;
+    meBox.y_min = -1.0;
+    meBox.z_min = -1.75;
+    meBox.x_max = 2.0;
+    meBox.y_max = 1.0;
+    meBox.z_max = 0;
+    renderBox(viewer, meBox, 0, Color(1, 0, 1));  // color setting is for purple
+    //renderBox(viewer, meBox, 0);
+    //*/
+
+
+    // Cluster the obstacles
+    std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloudClusters = pointProcessor.Clustering(segmentCloud.first, 0.75, 7, 1000); // ".first" part is where obstacles points are, ".second" part is where the road points are  ... here we grap the first part, obstacles.  Hyper-parameters: 0.1 for distance tollerance, 3 for min # of points to be considered a cluster, 100 for max # of points to be considered a cluster
+    
+    // Now itterate through my vector of point clouds
+    int clusterId = 1;
+    std::vector<Color> colors = {Color(1, 0, 0), Color(1, 1, 0), Color(0, 0, 1), Color(1, 1, 1), Color(0, 1, 1), Color(1, 0, 1)};  // set up colors for clusters of point clouds by creating a color list, to be used later.  Red, Yellow, and Blue
+    for (pcl::PointCloud<pcl::PointXYZI>::Ptr cluster : cloudClusters)  // grab the point cloud and call it cluster ... from the cloudClusters
+    {
+        std::cout << "cluster size ";
+        pointProcessor.numPoints(cluster);
+        renderPointCloud(viewer, cluster, "obstCloud" + std::to_string(clusterId), colors[clusterId%colors.size()]);  // render pointcloud, feed it cluster and give it the name obstCloud, then give it a color
+
+        // Put a colored box around the cluster
+        Box clusterBox = pointProcessor.BoundingBox(cluster);
+        renderBox(viewer, clusterBox, clusterId, colors[clusterId%colors.size()]);
+        //renderBox(viewer, clusterBox, clusterId);
+
+        ++clusterId;  // so I can itterate through the vector of point clouds
+        //clusterId++;
+    }
+
 }
 
 
@@ -96,7 +139,7 @@ void simpleHighway(pcl::visualization::PCLVisualizer::Ptr& viewer)
         //{
             std::cout << "cluster size ";
             pointProcessor.numPoints(cluster);
-            renderPointCloud(viewer, cluster, "obstClout" + std::to_string(clusterId), colors[clusterId%colors.size()]);  // render pointcloud, feed it cluster and give it the name obstCloud, then give it a color
+            renderPointCloud(viewer, cluster, "obstCloud" + std::to_string(clusterId), colors[clusterId%colors.size()]);  // render pointcloud, feed it cluster and give it the name obstCloud, then give it a color
         //}
 
         //if (render_box)
@@ -144,11 +187,40 @@ int main (int argc, char** argv)
     CameraAngle setAngle = XY;
     initCamera(setAngle, viewer);
     //simpleHighway(viewer);
-    cityBlock(viewer);
+    //cityBlock(viewer);
     
+    // Create pointProcessor cloud.  call it pointProcessorI because it is dealing with intensity now
+    ProcessPointClouds<pcl::PointXYZI> pointProcessorI;  // creating this on the stack (so every time I'm using the function, use the dot operator)
+    // Now create a stream coming out of "data_1" folder
+    std::vector<boost::filesystem::path> stream = pointProcessorI.streamPcd("../src/sensors/data/pcd/data_1");
+    // Create a stream iterator and start from the beginning
+    auto streamIterator = stream.begin();
+    // Create a placeholder for the cloud
+    pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloudI;
 
+    /*
     while (!viewer->wasStopped ())
     {
         viewer->spinOnce ();
     } 
+    */
+
+    while (!viewer -> wasStopped())
+    {
+        // Clear the viewer
+        viewer -> removeAllPointClouds();
+        viewer -> removeAllShapes();
+
+        // Load point cloud data and run the obstacle detection process
+        inputCloudI = pointProcessorI.loadPcd((*streamIterator).string());  // dereference the streamIterator that contains the path ... convert it to a string.  This loads up the point cloud data from the "data_1" file
+        cityBlock(viewer, pointProcessorI, inputCloudI);  // now call cityBlock with the pointProcessorI created on line 191 above, and use the pointCloudI that we just loaded up
+
+        streamIterator++;  // increment the stream iterator so we can move to the next frame in the file "data_1"
+
+        if (streamIterator == stream.end())
+            streamIterator = stream.begin();    // just keep looping the data
+
+        viewer -> spinOnce();
+    }
+
 }

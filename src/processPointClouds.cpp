@@ -109,10 +109,10 @@ std::pair<typename pcl::PointCloud<PointT>::Ptr, typename pcl::PointCloud<PointT
     auto startTime = std::chrono::steady_clock::now();
 	//pcl::PointIndices::Ptr inliers;
 
-    // TODO:: Fill in this function to find inliers for the cloud.
+    // Find inliers for the cloud.
     // Here we segment the cloud into two parts, the drivable plane and the various obstacles around us
     pcl::SACSegmentation<PointT> seg;  // create an object called seg.  Using PointT because our PointProcessor defines this template point for us.  This way we can pass in any type of point.
-    pcl::PointIndices::Ptr inliers{new pcl::PointIndices};  // define inliers from pcl type PointIndicies.  We use this later to seperate out the point cloud and break it up into two pieces.
+    pcl::PointIndices::Ptr inliers {new pcl::PointIndices};  // define inliers from pcl type PointIndicies.  We use this later to seperate out the point cloud and break it up into two pieces.
     pcl::ModelCoefficients::Ptr coefficients {new pcl::ModelCoefficients};  // here we define the coefficients of our model (SACMODEL_PLANE); can use these coefficients to render the plane in the plc viewr.
 
     seg.setOptimizeCoefficients(true);  // this helps us to try and get the best model possible
