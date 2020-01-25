@@ -12,18 +12,14 @@ struct Node
 	Node* left;
 	Node* right;
 
-	Node(std::vector<float> arr, int setId)
-	:	point(arr), id(setId), left(NULL), right(NULL)
-	{}
+	Node(std::vector<float> arr, int setId) : point(arr), id(setId), left(NULL), right(NULL){}
 };
 
 struct KdTree
 {
 	Node* root;
 
-	KdTree()
-	: root(NULL)
-	{}
+	KdTree() : root(NULL){}
 
 	void insertHelper(Node** node, uint depth, std::vector<float> point, int id)  // double pointer ... node pointer is actually what root was to begin with (Node* root;).  Now we're doing the memory address of this pointer node (double pointer = memory address thats pointing at the node that we are currently adding to the tree) 
 	{

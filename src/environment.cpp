@@ -43,8 +43,8 @@ void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer, ProcessPointCloud
     renderPointCloud(viewer, inputCloud, "inputCloud");
     */
         
-    Eigen::Vector4f min (-15, -6.25, -3, 1.0);  // minimum size for the box (or region of interst); x is red, y is green, z is blue axis in image
-    Eigen::Vector4f max (20, 7.65, 10, 1.0);  // maximum size for the box (or region of interest); x is red, y is green, z is blue axis in image
+    Eigen::Vector4f min (-10, -5.0, -3, 1.0);  // minimum size for the box (or region of interst); x is red, y is green, z is blue axis in image
+    Eigen::Vector4f max (15, 7.5, 10, 1.0);  // maximum size for the box (or region of interest); x is red, y is green, z is blue axis in image
    
     //ProcessPointClouds<pcl::PointXYZI> pointProcessor;  // create pointProcesor that uses XYZI; not needed now because I'm passing it in
     //pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud = pointProcessor.loadPcd("../src/sensors/data/pcd/data_1/0000000000.pcd");  // load up the point cloud data; no longer need to load this cloud
@@ -56,7 +56,7 @@ void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer, ProcessPointCloud
 
     // Segment out the ground plane from the obstacles
     //std::pair<pcl::PointCloud<pcl::PointXYZI>::Ptr, pcl::PointCloud<pcl::PointXYZI>::Ptr> segmentCloud = pointProcessor.SegmentPlane(filterCloud, 100, 0.13); // call the point processor, 100 itterations, distance of 0.13m.  This line creates our pair, obstCloud and planeCloud
-    std::pair<pcl::PointCloud<pcl::PointXYZI>::Ptr, pcl::PointCloud<pcl::PointXYZI>::Ptr> segmentCloud = pointProcessor.SegmentPlane(inputCloud, 25, 0.3);
+    std::pair<pcl::PointCloud<pcl::PointXYZI>::Ptr, pcl::PointCloud<pcl::PointXYZI>::Ptr> segmentCloud = pointProcessor.RansacPlane(inputCloud, 25, 0.3);
     //renderPointCloud(viewer, segmentCloud.second, "planeCloud");
 
     // Render the road as green, and all of the obstacles as red
@@ -78,7 +78,7 @@ void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer, ProcessPointCloud
 
 
     // Cluster the obstacles
-    std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloudClusters = pointProcessor.Clustering(segmentCloud.first, 0.75, 7, 1000); // ".first" part is where obstacles points are, ".second" part is where the road points are  ... here we grap the first part, obstacles.  Hyper-parameters: 0.1 for distance tollerance, 3 for min # of points to be considered a cluster, 100 for max # of points to be considered a cluster
+    std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloudClusters = pointProcessor.Clustering(segmentCloud.first, 0.5, 10, 1000); // ".first" part is where obstacles points are, ".second" part is where the road points are  ... here we grap the first part, obstacles.  Hyper-parameters: 0.1 for distance tollerance, 3 for min # of points to be considered a cluster, 100 for max # of points to be considered a cluster
     
     // Now itterate through my vector of point clouds
     int clusterId = 1;
@@ -190,7 +190,7 @@ int main (int argc, char** argv)
     //cityBlock(viewer);
     
     // Create pointProcessor cloud.  call it pointProcessorI because it is dealing with intensity now
-    ProcessPointClouds<pcl::PointXYZI> pointProcessorI;  // creating this on the stack (so every time I'm using the function, use the dot operator)
+    ProcessPointClouds<pcl::PointXYZI> pointProcessorI;  // creating this on the stack (so now every time I'm using a function, use the dot operator)
     // Now create a stream coming out of "data_1" folder
     std::vector<boost::filesystem::path> stream = pointProcessorI.streamPcd("../src/sensors/data/pcd/data_1");
     // Create a stream iterator and start from the beginning

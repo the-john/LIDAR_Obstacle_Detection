@@ -52,7 +52,7 @@ void render2DTree(Node* node, pcl::visualization::PCLVisualizer::Ptr& viewer, Bo
 		Box upperWindow = window;
 		Box lowerWindow = window;
 		// split on x axis
-		if(depth%2==0)
+		if(depth%2 == 0)
 		{
 			viewer->addLine(pcl::PointXYZ(node->point[0], window.y_min, 0),pcl::PointXYZ(node->point[0], window.y_max, 0),0,0,1,"line"+std::to_string(iteration));
 			lowerWindow.x_max = node->point[0];
@@ -65,6 +65,7 @@ void render2DTree(Node* node, pcl::visualization::PCLVisualizer::Ptr& viewer, Bo
 			lowerWindow.y_max = node->point[1];
 			upperWindow.y_min = node->point[1];
 		}
+
 		iteration++;
 
 		render2DTree(node->left,viewer, lowerWindow, iteration, depth+1);
@@ -133,8 +134,8 @@ int main ()
 
 	KdTree* tree = new KdTree; // creating KdTree
   
-    for (int i=0; i<points.size(); i++) // inserting points into KdTree
-    	tree->insert(points[i],i); 
+    for (int i = 0; i < points.size(); i++) // inserting points into KdTree
+    	tree -> insert(points[i],i); 
 
   	int it = 0;
   	render2DTree(tree->root,viewer,window, it);  // call render2DTree to visuallly see what it looks like
